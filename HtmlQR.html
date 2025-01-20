@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Link Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        h1 {
+            color: #f0f0f0;
+        }
+        textarea {
+            background-color: #333;
+            color: #f0f0f0;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            resize: none;
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        #link-container {
+            margin-top: 20px;
+        }
+        .link-box {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #bb86fc;
+            text-decoration: underline;
+        }
+        .link-box:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Website Link Checker</h1>
+    <p>Enter a list of URLs (one per line) and press "Read" to check if they are valid:</p>
+
+    <textarea id="input-text" rows="10" cols="50" placeholder="Enter URLs here, one per line..."></textarea><br><br>
+    <button id="read-button">Read</button>
+
+    <div id="link-container"></div>
+
+    <script>
+        // Check if a string is a valid URL
+        function isValidURL(url) {
+            try {
+                new URL(url); // Try to create a new URL object
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // When the 'Read' button is clicked
+        document.getElementById('read-button').addEventListener('click', function () {
+            const inputText = document.getElementById('input-text').value;
+            const lines = inputText.split('\n'); // Split input into lines
+            const container = document.getElementById('link-container');
+            container.innerHTML = ''; // Clear previous results
+
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine && isValidURL(trimmedLine)) { // If line is not empty and valid
+                    const linkBox = document.createElement('div');
+                    linkBox.className = 'link-box';
+                    linkBox.innerText = trimmedLine;
+                    linkBox.addEventListener('click', function () {
+                        const newWindow = window.open(trimmedLine, '_blank'); // Open the link in a new tab
+                        setTimeout(() => {
+                            newWindow.close(); // Automatically close after 5 seconds
+                        }, 5000);
+                    });
+                    container.appendChild(linkBox); // Append the valid link box
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
